@@ -1,0 +1,65 @@
+/* Theme + utilities only -- deliberately NOT importing tailwindcss/preflight.css. Preflight
+   resets border/padding/appearance on native form controls (select, input[type=range]) globally;
+   the rest of the app (469 `style={{}}` call sites across 24 files) relies on inline styles for
+   all of that today, and verifying inline style always wins isn't practical at that scale. Scoped
+   to the new navDock/ code, which sets what it needs via utility classes (e.g. appearance-none)
+   explicitly instead. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@theme {
+  /* Matches HudPanel.tsx's existing floating-panel chrome -- canonical palette for new navDock/
+     code only, not a retroactive unification of other files' own slightly-drifted colors. */
+  --color-panel: #14141b;
+  --color-panel-elevated: #1a1c25;
+  --color-panel-border: #2c2c42;
+  --color-accent: #4f8cff;
+  --color-text-dim: #8b8ba7;
+  --color-text-faint: #5b5e6e;
+  --color-input-bg: #1c1f27;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #1a1a1f;
+  overflow: hidden;
+}
+
+/* Dark, slim scrollbars everywhere so scrolling panels match the rest of the UI instead of the OS
+   default (white track + arrow buttons). WebKit/Blink use the pseudo-elements; Firefox gets the
+   standard properties (kept out of Blink, where setting them would disable the pseudo-elements). */
+:root {
+  color-scheme: dark;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2c2f40;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #444862;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2c2f40 transparent;
+  }
+}

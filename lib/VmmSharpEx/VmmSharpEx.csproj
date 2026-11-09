@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>VmmSharpEx</RootNamespace>
+		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<DebugType>none</DebugType>
+		<Deterministic>true</Deterministic>
+	</PropertyGroup>
+
+	<!-- Native MemProcFS DLLs - copy to both build output and publish output.
+	     Content (not None) + CopyToPublishDirectory is what the publish pipeline flows
+	     through a ProjectReference; a plain None with CopyToOutputDirectory copies to
+	     the lib's own bin but never reaches the referencing project's publish folder.
+	     ExcludeFromSingleFile=true keeps the single-file bundler from trying to pack
+	     native DLLs into the exe (which it can't do: it issues NETSDK1236 and drops
+	     them silently) so they ship as regular files next to the single-file exe. -->
+	<ItemGroup>
+		<Content Include="native\**\*.dll" Visible="false">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<Link>%(Filename)%(Extension)</Link>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Collections.Pooled.V2" Version="2.2.2" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<IsTrimmable>false</IsTrimmable> <!-- Disable trimming due to heavy interop usage -->
+		<EnableTrimAnalyzer>false</EnableTrimAnalyzer>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+		<NoWarn>$(NoWarn);CS1591;CS0649;IDE0160;IDE0290;IDE0301;IDE0305;IDE0306;IDE0028;IDE0300;IDE0057;IDE0079</NoWarn>
+	</PropertyGroup>
+
+</Project>

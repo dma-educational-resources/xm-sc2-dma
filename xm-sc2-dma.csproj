@@ -1,0 +1,103 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>SC2Radar.Program</StartupObject>
+    <AssemblyName>xm-sc2-dma</AssemblyName>
+    <RootNamespace>SC2Radar</RootNamespace>
+    <ApplicationIcon>src\xm-icon.ico</ApplicationIcon>
+    <ApplicationManifest>src\app.manifest</ApplicationManifest>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    <RetainVMGarbageCollection>true</RetainVMGarbageCollection>
+    <DebugType>none</DebugType>
+    <PublishRelease>true</PublishRelease>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AnalysisLevel>latest</AnalysisLevel>
+  </PropertyGroup>
+
+  <!-- Embedded resources -->
+  <ItemGroup>
+    <EmbeddedResource Include="resources\NeoSansStdRegular.otf" />
+    <EmbeddedResource Include="resources\NeoSansStdMedium.otf" />
+    <EmbeddedResource Include="resources\NeoSansStdBold.otf" />
+    <EmbeddedResource Include="resources\NeoSansStdItalic.otf" />
+    <EmbeddedResource Include="src\UI\Resources\*.png">
+      <!-- Drop the "src." path segment so the manifest name matches what IconCache /
+           WindowIcons load by (SC2Radar.UI.Resources.{stem}.png). Without this the
+           default name is SC2Radar.src.UI.Resources.{stem}.png and every lookup fails
+           silently, leaving popover cogs and other icon buttons blank. -->
+      <LogicalName>SC2Radar.UI.Resources.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <!-- The web radar viewer (built from web/ with npm run build), served by src/Web/WebRadarServer.cs -->
+  <ItemGroup>
+    <Content Include="resources\wwwroot\**\*">
+      <Link>wwwroot\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="src\xm-icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <!-- NuGet packages -->
+  <ItemGroup>
+    <PackageReference Include="Iced"                    Version="1.21.0" />
+    <PackageReference Include="ImGui.NET"               Version="1.90.9.1" />
+    <PackageReference Include="Veldrid"                 Version="4.9.0" />
+    <PackageReference Include="Veldrid.ImGui"           Version="1.0.0" />
+    <PackageReference Include="Veldrid.StartupUtilities" Version="4.9.0" />
+    <PackageReference Include="SharpDX"                 Version="4.2.0" />
+    <PackageReference Include="SharpDX.Direct3D11"      Version="4.2.0" />
+    <PackageReference Include="SharpDX.D3DCompiler"     Version="4.2.0" />
+    <PackageReference Include="SharpDX.DXGI"            Version="4.2.0" />
+    <PackageReference Include="SkiaSharp"               Version="3.119.2" />
+    <PackageReference Include="Collections.Pooled.V2"   Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="9.0.6" />
+    <PackageReference Include="System.Management"       Version="9.0.0" />
+    <PackageReference Include="Open.Nat.imerzan"        Version="2.2.0" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="lib\VmmSharpEx\VmmSharpEx.csproj" />
+  </ItemGroup>
+
+  <!-- Not part of the SC2 build (lib\ holds VmmSharpEx, built as its own project) -->
+  <ItemGroup>
+    <Compile Remove="lib\**" />
+    <None Remove="lib\**" />
+    <EmbeddedResource Remove="lib\**" />
+    <Compile Remove="web\**" />
+    <None Remove="web\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="src\Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="src\Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
