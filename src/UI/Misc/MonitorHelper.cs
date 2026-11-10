@@ -1,5 +1,4 @@
-﻿// MonitorHelper.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using SC2Radar.Common.Misc;

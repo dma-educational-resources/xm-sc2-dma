@@ -64,7 +64,6 @@
     <PackageReference Include="SharpDX.DXGI"            Version="4.2.0" />
     <PackageReference Include="SkiaSharp"               Version="3.119.2" />
     <PackageReference Include="Collections.Pooled.V2"   Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="9.0.6" />
     <PackageReference Include="System.Management"       Version="9.0.0" />
     <PackageReference Include="Open.Nat.imerzan"        Version="2.2.0" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />

@@ -1,5 +1,4 @@
-﻿// ImGuiApp_SharedDevice.cs
-// Exposes the radar window's DX11 device for MapTextureCache.
+﻿// Exposes the radar window's DX11 device to callers that need to upload textures.
 
 using SharpDX.Direct3D11;
 

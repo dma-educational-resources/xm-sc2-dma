@@ -1,6 +1,4 @@
-﻿// ImGuiStyle.cs
-// All theme/color/style constants for the ImGui UI.
-// Modify values here to change the look of the entire application.
+﻿// All theme/color/style constants for the ImGui UI.
 
 using System.Numerics;
 using ImGuiNET;

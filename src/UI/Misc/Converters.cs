@@ -1,15 +1,7 @@
-﻿// Converters.cs
-// WPF IValueConverter classes are removed -ImGui renders UI directly without data binding.
-// Only the non-WPF utility methods are kept (icon loading via SkiaSharp).
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using SkiaSharp;
 
 namespace SC2Radar.UI.Misc
 {
@@ -73,94 +65,6 @@ namespace SC2Radar.UI.Misc
                 JsonSerializer.Serialize(writer, kvp.Value, options);
             }
             writer.WriteEndObject();
-        }
-    }
-
-
-    /// <summary>
-    /// Utility methods for loading item icons as SkiaSharp bitmaps.
-    /// The WPF IValueConverter implementations are removed -ImGui draws icons directly.
-    /// </summary>
-    public static class Converters
-    {
-        /// <summary>
-        /// Load an item icon as an SKBitmap from the local icon cache.
-        /// Returns null if the icon is not found.
-        /// </summary>
-        public static SKBitmap? LoadItemIcon(string itemId, string iconCachePath)
-        {
-            try
-            {
-                var path = Path.Combine(iconCachePath, $"{itemId}.png");
-                if (!File.Exists(path)) return null;
-                return SKBitmap.Decode(path);
-            }
-            catch { return null; }
-        }
-
-        public static class ItemIconConverter
-        {
-            private static readonly HttpClient _http = new()
-            {
-                Timeout = TimeSpan.FromSeconds(15)
-            };
-
-            /// <summary>
-            /// Downloads the item's base image from assets.tarkov.dev (WebP) and
-            /// saves it as a PNG in <paramref name="outputDir"/>.
-            /// Skips if a valid PNG (&gt;1 KB) already exists.
-            /// </summary>
-            public static async Task SaveItemIconAsPng(string itemId, string outputDir, string itemName = null)
-            {
-                string outputPath = Path.Combine(outputDir, $"{itemId}.png");
-
-                // Skip re-download if a valid icon already exists.
-                if (File.Exists(outputPath) && new FileInfo(outputPath).Length > 1024)
-                    return;
-
-                string url = $"https://assets.tarkov.dev/{itemId}-base-image.webp";
-                try
-                {
-                    byte[] imageBytes = await _http.GetByteArrayAsync(url).ConfigureAwait(false);
-
-                    using var ms     = new MemoryStream(imageBytes);
-                    using var codec  = SKCodec.Create(ms);
-                    if (codec == null) return;
-
-                    var info   = new SKImageInfo(codec.Info.Width, codec.Info.Height, SKColorType.Rgba8888);
-                    using var bmp = new SKBitmap(info);
-                    if (codec.GetPixels(info, bmp.GetPixels()) != SKCodecResult.Success) return;
-
-                    using var img  = SKImage.FromBitmap(bmp);
-                    using var data = img.Encode(SKEncodedImageFormat.Png, 100);
-                    using var fs   = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                    data.SaveTo(fs);
-                }
-                catch (Exception ex)
-                {
-                    var label = string.IsNullOrEmpty(itemName) ? itemId : $"({itemName}) {itemId}";
-                    System.Diagnostics.Debug.WriteLine($"[IconCache] Failed {label}: {ex.Message}");
-                    try
-                    {
-                        byte[] fallbackBytes = await _http.GetByteArrayAsync("https://assets.tarkov.dev/unknown-item-512.webp").ConfigureAwait(false);
-                        using var ms    = new MemoryStream(fallbackBytes);
-                        using var codec = SKCodec.Create(ms);
-                        if (codec != null)
-                        {
-                            var info = new SKImageInfo(codec.Info.Width, codec.Info.Height, SKColorType.Rgba8888);
-                            using var bmp = new SKBitmap(info);
-                            if (codec.GetPixels(info, bmp.GetPixels()) == SKCodecResult.Success)
-                            {
-                                using var img  = SKImage.FromBitmap(bmp);
-                                using var data = img.Encode(SKEncodedImageFormat.Png, 100);
-                                using var fs   = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                                data.SaveTo(fs);
-                            }
-                        }
-                    }
-                    catch { }
-                }
-            }
         }
     }
 }

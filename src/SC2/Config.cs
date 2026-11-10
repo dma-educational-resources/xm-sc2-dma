@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Collections.Generic;
 using SC2Radar.UI;
+using SC2Radar.UI.Misc;
 using SC2Radar.Common.Misc.Config;
 
 namespace SC2Radar.SC2
@@ -223,7 +224,11 @@ namespace SC2Radar.SC2
 
         // ── Persistence ───────────────────────────────────────────────────────
         [JsonIgnore]
-        static readonly JsonSerializerOptions _json = new() { WriteIndented = true };
+        static readonly JsonSerializerOptions _json = new()
+        {
+            WriteIndented = true,
+            Converters = { SafeEnumKeyDictionaryConverterFactory.Instance },
+        };
 
         // Lives alongside the logs/profiles/other data under Program.DataDir, which uses
         // Program.SoftwareId ("sc2_dma_radar") - previously hardcoded a separate "sc2_dma"
@@ -237,7 +242,7 @@ namespace SC2Radar.SC2
             {
                 if (File.Exists(DefaultFile))
                 {
-                    var cfg = JsonSerializer.Deserialize<Config>(File.ReadAllText(DefaultFile)) ?? new();
+                    var cfg = JsonSerializer.Deserialize<Config>(File.ReadAllText(DefaultFile), _json) ?? new();
                     if (cfg.MemWrites.MigrateLegacyFiles()) cfg.SaveDebounced();
                     return cfg;
                 }

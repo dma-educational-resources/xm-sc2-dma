@@ -1,5 +1,4 @@
-﻿// ConfirmModal.cs
-// Generic confirmation dialog for destructive / irreversible actions.
+﻿// Generic confirmation dialog for destructive / irreversible actions.
 //
 // Usage (call from any panel's DrawPanelContent):
 //   if (UI.Button("Enable Mem-Writes", ...))

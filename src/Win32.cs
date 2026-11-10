@@ -1,5 +1,4 @@
-﻿// Win32.cs
-// P/Invoke declarations needed for the ImGui DX11 windowing layer.
+﻿// P/Invoke declarations needed for the ImGui DX11 windowing layer.
 
 using System;
 using System.Runtime.InteropServices;

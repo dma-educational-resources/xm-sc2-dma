@@ -1,5 +1,4 @@
-﻿// ImGuiRenderer.cs
-// Core DX11 + ImGui.NET backend.
+﻿// Core DX11 + ImGui.NET backend.
 // Owns two windows: the main radar/menu window and the transparent ESP overlay.
 // All ImGui frames are driven from a single dedicated render thread.
 

@@ -1,4 +1,3 @@
-// LoadingWindow.cs
 // Startup splash - a genuine ImGui window (its own DX11 device + swap chain + ImGui
 // context, exactly the same DX11Window/ImGuiStyle/UIControls stack the main app uses),
 // not a WinForms/GDI+ stand-in. It runs on its own dedicated thread before

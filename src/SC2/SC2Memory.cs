@@ -39,9 +39,6 @@ namespace SC2Radar.SC2
         // Diagnostic output paths (null = not yet generated).
         public string? LastSweepFile { get; private set; }
 
-        // Prevent repeated auto-sweep fires per session.
-        private volatile bool _autoSweptThisSession = false;
-
         readonly Config _cfg;
 
         const int PAGE    = 0x1000;

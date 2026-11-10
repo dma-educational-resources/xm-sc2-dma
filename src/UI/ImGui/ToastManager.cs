@@ -1,5 +1,4 @@
-﻿// ToastManager.cs
-// Lightweight transient toast notification overlay.
+﻿// Lightweight transient toast notification overlay.
 //
 // Usage:
 //   ToastManager.Show("Saved successfully!", ToastStyle.Success);

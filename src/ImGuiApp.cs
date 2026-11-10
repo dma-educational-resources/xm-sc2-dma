@@ -1,5 +1,4 @@
-﻿// ImGuiApp.cs
-// Creates the DX11 device + radar window and runs the render loop on a
+﻿// Creates the DX11 device + radar window and runs the render loop on a
 // dedicated high-priority thread.
 
 using System;

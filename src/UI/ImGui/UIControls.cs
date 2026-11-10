@@ -1,5 +1,4 @@
-﻿// UIControls.cs
-// Custom draw-list widget library.
+﻿// Custom draw-list widget library.
 //
 // Every interactive control uses ImGui's InvisibleButton / Dummy for layout and
 // hit-testing so scrolling, BeginDisabled, ID-stack, and tooltips all work normally.
